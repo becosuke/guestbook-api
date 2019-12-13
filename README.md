@@ -1,8 +1,3 @@
 # guestbook-api
 
-## structure
-
-document
-
-name
-body
+see https://github.com/becosuke/guestbook-container

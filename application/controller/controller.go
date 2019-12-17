@@ -13,6 +13,7 @@ func Register(serveMux *http.ServeMux) {
 	serveMux.HandleFunc("/add", Add)
 	serveMux.HandleFunc("/range", Range)
 	serveMux.HandleFunc("/flush", Flush)
+	serveMux.HandleFunc("/random", Random)
 }
 
 func Index(w http.ResponseWriter, r *http.Request) {
@@ -61,7 +62,7 @@ func Add(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	_ , _ = w.Write(res)
+	_, _ = w.Write(res)
 }
 
 func Range(w http.ResponseWriter, r *http.Request) {
@@ -86,5 +87,10 @@ func Range(w http.ResponseWriter, r *http.Request) {
 
 func Flush(w http.ResponseWriter, _ *http.Request) {
 	model.Flush()
+	w.WriteHeader(http.StatusOK)
+}
+
+func Random(w http.ResponseWriter, _ *http.Request) {
+	model.Random()
 	w.WriteHeader(http.StatusOK)
 }

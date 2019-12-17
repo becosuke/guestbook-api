@@ -140,3 +140,24 @@ func TestFlush(t *testing.T) {
 
 	t.Log(w.Body.String())
 }
+
+func TestRandom(t *testing.T) {
+	if !config.IsLocal() {
+		t.Log("skip test")
+		return
+	}
+
+	req, err := http.NewRequest(http.MethodGet, "/random", nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	w := httptest.NewRecorder()
+	serveMux.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Errorf("code: %d", w.Code)
+	}
+
+	TestRange(t)
+}

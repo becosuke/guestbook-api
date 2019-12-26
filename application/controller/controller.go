@@ -71,12 +71,17 @@ func Range(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	page, err := strconv.Atoi(r.URL.Query().Get("p"))
-	if err != nil || page < 1 {
-		page = 1
+	query := r.URL.Query()
+	start, err := strconv.Atoi(query.Get("start"))
+	if err != nil {
+		start = 0
+	}
+	end, err := strconv.Atoi(query.Get("end"))
+	if err != nil {
+		end = start + model.NumPerPage - 1
 	}
 
-	res, err := model.Range(page)
+	res, err := model.Range(start, end)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return

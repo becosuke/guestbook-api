@@ -13,7 +13,7 @@ func init() {
 
 const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 const documentKey = "document"
-const numPerPage = 10
+const NumPerPage = 10
 
 var client = redis.NewClient(&redis.Options{
 	Addr:     config.GetConfig().Redis.Addr,
@@ -47,11 +47,9 @@ func Add(body []byte) ([]byte, error) {
 	return record, nil
 }
 
-func Range(page int) ([]byte, error) {
-	start := (page - 1) * numPerPage
-	end := page*numPerPage - 1
-	documents := make([]Document, 0, numPerPage)
-	for _, record := range client.ZRange(documentKey, int64(start), int64(end)).Val() {
+func Range(start int, end int) ([]byte, error) {
+	documents := make([]Document, 0, NumPerPage)
+	for _, record := range client.ZRevRange(documentKey, int64(start), int64(end)).Val() {
 		document := Document{}
 		if err := json.Unmarshal([]byte(record), &document); err != nil {
 			return []byte{}, err
@@ -71,7 +69,7 @@ func Flush() {
 
 func Random() {
 	for i := 0; i < 1000; i++ {
-		document := Document{Name: randString(10), Body: randString(200), Score: config.NowDatetime().UnixNano()}
+		document := Document{Name: randString(10), Body: randString(50), Score: config.NowDatetime().UnixNano()}
 		record, err := json.Marshal(document)
 		if err != nil {
 			continue

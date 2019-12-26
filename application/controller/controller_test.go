@@ -105,7 +105,7 @@ func TestRange(t *testing.T) {
 		add(t, "name"+strconv.Itoa(i), "body"+strconv.Itoa(i))
 	}
 
-	req, err := http.NewRequest(http.MethodGet, "/range?p=1", nil)
+	req, err := http.NewRequest(http.MethodGet, "/range?start=0", nil)
 	if err != nil {
 		t.Error(err)
 	}
